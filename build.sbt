@@ -10,3 +10,6 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "org.xerial" % "sqlite-jdbc" % "3.7.2"
 )
+
+libraryDependencies += "org.jsoup" % "jsoup" % "1.8.3"
+

@@ -3,12 +3,16 @@ package db
 import java.io.File
 
 import slick.jdbc.SQLiteProfile.api._
-import slick.lifted.TableQuery
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-case class Currency(currency: String, cashBuy: String, cashSell: String, transferBuy: String, transferSell: String, createdAt: String)
+case class Currency(currency: String,
+                    cashBuy: String,
+                    cashSell: String,
+                    transferBuy: String,
+                    transferSell: String,
+                    createdAt: String)
 
 class CurrencyTable(tag: Tag) extends Table[Currency](tag, "currencies") {
 
@@ -27,15 +31,16 @@ class CurrencyTable(tag: Tag) extends Table[Currency](tag, "currencies") {
   def createdAt = column[String]("createdAt")
 }
 
+object DbSchema {
 
-object DbSchema extends App {
+  def run(): Unit = {
+    // delete only in dev environment
+    new File("currency_rates.db").delete()
 
-  // delete only in dev environment
-  new File("currency_rates.db").delete()
+    val db = Database.forConfig("dbConfig")
+    val currencies = TableQuery[CurrencyTable]
 
-  val db = Database.forConfig("dbConfig")
-  val currencies = TableQuery[CurrencyTable]
-
-  println(currencies.schema.create.statements.mkString(", "))
-  Await.result(db.run(currencies.schema.create), 2.seconds)
+    println(currencies.schema.create.statements.mkString(", "))
+    Await.result(db.run(currencies.schema.create), 2.seconds)
+  }
 }

@@ -6,6 +6,6 @@ import scala.collection.mutable
 
 trait SwedbankCurrencyRatesParser {
 
-  def parse(name: String): mutable.Seq[Currency];
+  def parse(path: String): mutable.Seq[Currency]
 
 }
