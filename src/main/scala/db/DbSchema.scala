@@ -1,3 +1,5 @@
+package db
+
 import java.io.File
 
 import slick.jdbc.SQLiteProfile.api._
@@ -26,14 +28,14 @@ class CurrencyTable(tag: Tag) extends Table[Currency](tag, "currencies") {
 }
 
 
-object DbSchema {
+object DbSchema extends App {
 
-  def run(): Unit = {
-    new File("currency_rates.db").delete()
+  // delete only in dev environment
+  new File("currency_rates.db").delete()
 
-    val db = Database.forConfig("dbConfig")
-    val currencies = TableQuery[CurrencyTable]
-    println(currencies.schema.create.statements.mkString(", "))
-    Await.result(db.run(currencies.schema.create), 2.seconds)
-  }
+  val db = Database.forConfig("dbConfig")
+  val currencies = TableQuery[CurrencyTable]
+
+  println(currencies.schema.create.statements.mkString(", "))
+  Await.result(db.run(currencies.schema.create), 2.seconds)
 }
